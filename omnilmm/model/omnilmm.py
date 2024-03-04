@@ -12,8 +12,8 @@ from transformers import AutoConfig, AutoModelForCausalLM
 from transformers import MistralForCausalLM, MistralModel, MistralConfig
 from transformers.modeling_outputs import BaseModelOutputWithPast, CausalLMOutputWithPast
 
-from omnilmm.model.utils import build_transform
-from omnilmm.model.resampler import Resampler
+from .utils import build_transform
+from .resampler import Resampler
 
 DEFAULT_IMAGE_PATCH_TOKEN = "<im_patch>"
 DEFAULT_IM_START_TOKEN = "<im_start>"

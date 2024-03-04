@@ -10,7 +10,7 @@ import transformers
 import numpy as np
 
 from typing import Dict, Optional, Sequence
-from omnilmm import conversation as conversation_lib
+from ...omnilmm import conversation as conversation_lib
 
 IGNORE_INDEX = -100
 DEFAULT_IMAGE_TOKEN = "<image>"
