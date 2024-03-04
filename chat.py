@@ -92,13 +92,13 @@ class OmniLMM12B:
         self.tokenizer = tokenizer
         self.model.eval()
 
-    def decode(self, image, input_ids):
+    def decode(self, image, input_ids, temperature=0.0, max_new_tokens=300):
         with torch.inference_mode():
             output = self.model.generate_vllm(
                 input_ids=input_ids.unsqueeze(0).cuda(),
                 images=image.unsqueeze(0).half().cuda(),
-                temperature=0.6,
-                max_new_tokens=1024,
+                temperature=temperature,
+                max_new_tokens=max_new_tokens,
                 # num_beams=num_beams,
                 do_sample=True,
                 output_scores=True,
@@ -107,13 +107,16 @@ class OmniLMM12B:
                 top_k=30,
                 top_p=0.9,
             )
+            input_id_len = input_ids.shape[1]
 
             response = self.tokenizer.decode(
                 output.sequences[0], skip_special_tokens=True)
             response = response.strip()
-            return response
+            answer_only = self.tokenizer.decode(
+                output.sequences[0, input_id_len:], skip_special_tokens=True).strip()
+            return response, answer_only
 
-    def chat(self, input):
+    def chat(self, input, temperature=0.0, max_new_tokens=300):
         try:
             image = Image.open(io.BytesIO(base64.b64decode(input['image']))).convert('RGB')
         except Exception as e:
@@ -126,7 +129,7 @@ class OmniLMM12B:
         #print('input_ids', input_ids)
         image = self.image_transform(image)
 
-        out = self.decode(image, input_ids)
+        out = self.decode(image, input_ids, temperature=temperature, max_new_tokens=max_new_tokens)
 
         return out
         
@@ -168,8 +171,8 @@ class OmniLMMChat:
         else:
             self.model = OmniLMM3B(model_path)
 
-    def chat(self, input):
-        return self.model.chat(input)
+    def chat(self, input, temperature=0.0, max_new_tokens=300):
+        return self.model.chat(input, temperature=temperature, max_new_tokens=max_new_tokens)
 
 
 if __name__ == '__main__':
