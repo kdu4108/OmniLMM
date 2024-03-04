@@ -316,5 +316,5 @@ conv_templates = {
 }
 
 
-if __name__ == "__main__":
-    print(default_conversation.get_prompt())
+# if __name__ == "__main__":
+#     print(default_conversation.get_prompt())

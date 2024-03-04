@@ -175,23 +175,23 @@ class OmniLMMChat:
         return self.model.chat(input, temperature=temperature, max_new_tokens=max_new_tokens)
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     
-    model_path = 'openbmb/OmniLMM-12B'
-    chat_model = OmniLMMChat(model_path)
+#     model_path = 'openbmb/OmniLMM-12B'
+#     chat_model = OmniLMMChat(model_path)
 
-    im_64 = img2base64('./assets/worldmap_ck.jpg')
+#     im_64 = img2base64('./assets/worldmap_ck.jpg')
 
-    # first round chat 
-    msgs = [{"role": "user", "content": "What is interesting about this image?"}]
-    input = {"image": im_64, "question": json.dumps(msgs, ensure_ascii=True)}
-    answer = chat_model.chat(input)
-    print(msgs[-1]["content"]+'\n', answer)
+#     # first round chat 
+#     msgs = [{"role": "user", "content": "What is interesting about this image?"}]
+#     input = {"image": im_64, "question": json.dumps(msgs, ensure_ascii=True)}
+#     answer = chat_model.chat(input)
+#     print(msgs[-1]["content"]+'\n', answer)
 
-    # second round chat 
-    msgs.append({"role": "assistant", "content": answer})
-    msgs.append({"role": "user", "content": "Where is China in the image"})
-    input = {"image": im_64,"question": json.dumps(msgs, ensure_ascii=True)}
-    answer = chat_model.chat(input)
-    print(msgs[-1]["content"]+'\n', answer)
+#     # second round chat 
+#     msgs.append({"role": "assistant", "content": answer})
+#     msgs.append({"role": "user", "content": "Where is China in the image"})
+#     input = {"image": im_64,"question": json.dumps(msgs, ensure_ascii=True)}
+#     answer = chat_model.chat(input)
+#     print(msgs[-1]["content"]+'\n', answer)
 
