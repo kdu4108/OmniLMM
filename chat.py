@@ -107,15 +107,14 @@ class OmniLMM12B:
                 # top_k=30,
                 # top_p=0.9,
             )
-            print("input ids shape:", input_ids.shape)
+            # print("input ids shape:", input_ids.shape)
             input_id_len = len(input_ids)
 
             response = self.tokenizer.decode(
                 output.sequences[0], skip_special_tokens=True)
             response = response.strip()
-            answer_only = self.tokenizer.decode(
-                output.sequences[0, input_id_len:], skip_special_tokens=True).strip()
-            return response, answer_only
+
+            return response
 
     def chat(self, input, temperature=0.0, max_new_tokens=300):
         try:
@@ -146,7 +145,7 @@ class OmniLMM3B:
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         self.model.eval().cuda()
 
-    def chat(self, input):
+    def chat(self, input, temperature=0., max_new_tokens=300):
         try:
             image = Image.open(io.BytesIO(base64.b64decode(input['image']))).convert('RGB')
         except Exception as e:
@@ -159,9 +158,10 @@ class OmniLMM3B:
             msgs=msgs,
             context=None,
             tokenizer=self.tokenizer,
-            sampling=True,
-            temperature=0.7
-    	)
+            sampling=False,
+            temperature=temperature,
+            max_new_tokens=max_new_tokens,
+        )
         return answer
 
 
